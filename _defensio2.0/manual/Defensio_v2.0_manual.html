@@ -1,0 +1,444 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/xhtml; charset=utf-8" />
+	<title>Defensio for Pixelpost V2.x User Guide</title>
+	<script type="text/javascript">
+	// <![CDATA[
+	if (!DK) { var DK = new Object(); };
+	DK.Scroll = {
+	yOffset                        : 47,
+	scrollLoop             : false, 
+	scrollInterval : null,
+	getWindowHeight        : function() {
+	       if (document.all) {  return (document.documentElement.clientHeight) ? document.documentElement.clientHeight : document.body.clientHeight; }
+	       else { return window.innerHeight; }
+	       },
+	getScrollLeft  : function() {
+	       if (document.all) { return (document.documentElement.scrollLeft) ? document.documentElement.scrollLeft : document.body.scrollLeft; }
+	       else { return window.pageXOffset; }
+	       },
+	getScrollTop   : function() {
+	       if (document.all) { return (document.documentElement.scrollTop) ? document.documentElement.scrollTop : document.body.scrollTop; }
+	       else { return window.pageYOffset; }
+	       },
+	getElementYpos : function(el) {
+	       var y = 0;
+	       while(el.offsetParent){
+	               y += el.offsetTop;
+	               el = el.offsetParent;
+	               }
+	       return y;
+	       },
+	to                             : function(id){
+	       if(this.scrollLoop){
+	               clearInterval(this.scrollInterval);
+	               this.scrollLoop = false;
+	               this.scrollInterval = null;
+	               }
+	       var container = document.getElementById('container');
+	       var documentHeight = this.getElementYpos(container) + container.offsetHeight;
+	       var windowHeight = this.getWindowHeight()-this.yOffset;
+	       var ypos = this.getElementYpos(document.getElementById(id));
+	       if(ypos > documentHeight - windowHeight) ypos = documentHeight - windowHeight;
+	       this.scrollTo(0,ypos-this.yOffset);
+	       },
+	scrollTo               : function(x,y) {
+	       if(this.scrollLoop) {
+	               var left = this.getScrollLeft();
+	               var top = this.getScrollTop();
+	               if(Math.abs(left-x) <= 1 && Math.abs(top-y) <= 1) {
+	                       window.scrollTo(x,y);
+	                       clearInterval(this.scrollInterval);
+	                       this.scrollLoop = false;
+	                       this.scrollInterval = null;
+	                       }
+	               else {
+	                       window.scrollTo(left+(x-left)/2, top+(y-top)/2);
+	                       }
+	               }
+	       else {
+	               this.scrollInterval = setInterval("DK.Scroll.scrollTo("+x+","+y+")",100);
+	               this.scrollLoop = true;
+	               }
+	       }
+	};
+	
+	window.onload = function()
+	{
+	var headings = document.getElementsByTagName('h2');
+	var menu = '';
+	
+	menu += '<select onchange="DK.Scroll.to(this.options[this.selectedIndex].value);">';
+	menu += '<option value="top">Top<\/option>';
+	for (var i = 0; i < headings.length; i++) {
+	       menu += '<option value="' + headings[i].id + '">' + headings[i].innerHTML + '<\/option>';
+	       }
+	menu += '<\/select>';
+	document.getElementById('container').innerHTML += menu;
+	}
+	
+	// ]]>
+	</script>
+	<style type="text/css">
+	body {
+		position: relative;
+		background-color: #FFF;
+		color: #333;
+		font-size: 76%;
+		font-family: sans-serif;
+		text-align: center;
+		padding: 0;
+		margin: 0;
+	}
+	
+	a {
+		color:#6699CC;
+		text-decoration:none;
+	}
+	
+	a img { 
+		border:none; 
+	}
+	
+	a:hover {
+		text-decoration:none;
+		color:#666;
+	}
+	
+	select {
+		position: fixed;
+		top: 14px;
+		width: 160px;
+		margin: 0 0 0 440px;
+		opacity: .4;
+	}
+	
+	select:hover {
+		opacity: 1;
+		cursor: pointer;
+	}
+	
+	p {
+		margin-top: 0;
+	}
+	
+	.center {
+		position: relative;
+		width: 600px;
+		margin: 0 auto;
+		text-align: left;
+		font-size: 1.0em;
+	}
+	
+	h1, h2 {
+		font-weight: normal;
+	}
+	
+	table:first-child h1 {
+		color: #333;
+		margin: 1.0em 0 0;
+	}
+	
+	h1 {
+		color: #999;
+		font-size: 3.5em;
+	}
+	
+	h2 {
+		color: #333;
+		font-size: 2.4em;
+	}
+	
+	i {
+		font-style: normal;
+		color: #6699CC;
+		font-weight: normal;
+		font-size: 1.0em;
+	}
+	
+	code {
+		font-style: normal;
+		color: #333;
+		font-weight: normal;
+		font-size: 1.2em;
+	}
+	
+	table {
+		margin-bottom: 2.0em;
+		border-collapse: collapse;
+	}
+	
+	td {
+		border-bottom: 1px solid #DDD;
+		padding: 8px 24px 8px 0;
+		text-align: left;
+		vertical-align: baseline;
+	}
+	
+	tr:first-child td {
+		border-top: 4px solid #6699CC;
+	}
+	
+	table:first-child td, tr.v td {
+		border: none;
+	}
+	
+	tr.v td {
+		padding: 0.8em 0.8em;
+		border: 1px solid #F2F2C2;
+		background-color: #FFC;
+	}
+	
+	tr.last-child td {
+		border-bottom-width: 2px;
+	}
+	
+	.e, .h {
+		font-weight: bold;
+	}
+	
+	.e {
+		white-space: nowrap; 
+		width: 100px;
+	}
+	
+	span.warning {
+ 		color: #FF0000;
+	}
+	
+	*[style='color: #FFFFFF'] {
+		text-shadow: 2px 2px #BBB;
+	}
+	</style>
+</head>
+<body>
+<div id="container" class="center">
+	<table border="0" cellpadding="3" width="600">
+		<tr class="h">
+			<td><h1 id="top" class="p">Defensio V2.0 ADDON for Pixelpost</h1></td>
+		</tr>
+	</table>
+	
+	<h2 id="whatIs">[1] What is Defensio?</h2>
+	
+	<table border="0" cellpadding="3" width="640">
+		<tr class="last-child">
+			<td class="e">INTRODUCTION</td>
+			<td class="v">
+				Defensio is a spam filtering web service that you can use to protect your blog or web application from comment spam. This particular piece of code is designed to protect your Pixelpost blog from unwanted comment SPAM by using an adaptive, personalized filtering algorithm.<br /><br />
+				<table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td>An earlier version of the Defensio addon (version 1.x) was part of the default suite of addons for a Pixelpost installation. The current V2.x code is designed to work with the Defensio API V2.x, initially launched in early januari 2010. The new API version has been redesigned from scratch to be faster, more flexible, and more generic. On top of that it supports asynchronous requests when analyzing documents (previously
+called comments).
+This speeds up your Web site considerably, since the site no longer needs to wait
+for the Defensio servers to process a document. Instead, Defensio will send you the result once
+analysis has been completed.</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+	<h2 id="requirements">[2] Requirements</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+		<tr>
+			<td class="e">INTRODUCTION</td>
+			<td class="v">This version of the addon requires at least <strong>PHP Version 5.0.0</strong> to function correctly. Please check with your hosting company when in doubt. Further requirements are:<br />
+            <ul>
+            <li>Pixelpost version 1.7.x</li>
+            <li><strong>Free</strong> Defensio API key</li>
+            </ul>
+            <table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td>Note, do not rename the '_defensio2.0' folder as this will stop the addon from working.</td>
+					</tr>
+				</table>
+            </td>
+		</tr>
+	</table>
+
+
+	<h2 id="installAdmin">[3] Installation</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+		<tr>
+			<td class="e">INTRODUCTION</td>
+			<td class="v">The installation is quite straightforward, it requires uploading the '_defensio2.0' folder into the addon folder. Details are below.<br /><br />
+            <table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td>Note, Defensio cannot work in conjunction with Askismet. You either have to use Defensio (prefered) or Akismet but not both at the same time.</td>
+					</tr>
+				</table>
+            </td>
+		</tr>
+		<tr>
+			<td class="e">STEP 01</td>
+			<td class="v">Upload the folder '_defensio2.0' located in the zip file to your 'addons' directory located on the root of your Pixelpost.<br /><br /></td>
+		</tr>
+		<tr>
+			<td class="e">STEP 02</td>
+			<td class="v">Login to your Pixelpost admin site and go to the 'addons' tab. Check if both the front and admin side of the Defensio addon are there and if it is "ON".<br /><br />
+				<table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td>Note, the first time viewing this page, the Defensio addon will create a 'defensio' table for storing settings and will update the 'comments' table to store information about each comment.</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="e">STEP 03</td>
+		<td class="v">You can now explore the settings needed for this addon. Please go to the 'Options' tab of your Pixelpost installation. There you'll find a menu item called SPAM CONTROL, where all options can be set. Feel free to change settings at this point, but they are described in detail later on for better understandability.<br /><br /></td>
+		</tr>
+	</table>
+    
+    	<h2 id="installAdmin">[4] Upgrade</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+		<tr>
+			<td class="e">INTRODUCTION</td>
+			<td class="v">Please remove the old Defensio folder '_defensio' from the addons folder.<br /><br />
+            <table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td>Note, Defensio cannot work in conjunction with Askismet. You either have to use Defensio (prefered) or Akismet but not both at the same time.</td>
+					</tr>
+				</table></td>
+		</tr>
+		<tr>
+			<td class="e">STEP 01</td>
+			<td class="v">Upload the folder '_defensio2.0' located in the zip file to your 'addons' directory located on the root of your Pixelpost.<br /><br /></td>
+		</tr>
+		<tr>
+			<td class="e">STEP 02</td>
+			<td class="v">Login to your Pixelpost admin site and go to the 'addons' tab. Check if both the front and admin side of the Defensio addon are there and if it is "ON".<br /><br />
+				<table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td>Note, the first time viewing this page after upgrading, the Defensio addon will update both the 'defensio' table and 'comments' table.</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="e">STEP 03</td>
+		<td class="v">You can now explore the settings needed for this addon. Please go to the 'Options' tab of your Pixelpost installation. There you'll find a menu item called SPAM CONTROL, where all options can be set. Feel free to change settings at this point, but they are described in detail later on for better understandability.<br /><br /></td>
+		</tr>
+	</table>
+
+	
+	<h2 id="adminSettings">[5] Administration Settings</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+		<tr>
+			<td class="e">INTRODUCTION</td>
+			<td class="v">Here is a description of all administrative settings located on the options section for this addon.<br /><br /></td>
+		</tr>
+		<tr>
+			<td class="e">Defensio API Key:</td>
+			<td class="v">In order to use the Defensio service, you will need a free Defensio API key.<br /><br />
+			<table border="0" cellpadding="3" width="500">
+					<tr class="v">
+					<td>Get your free Defensio API Key at <a href="http://defensio.com/signup">Defensio.com</a>.</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="e">Obvious Spam Threshold:</td>
+			<td class="v">Any comments calculated to be above or equal to this "spaminess" threshold will be hidden from view in your quarantine..<br /><br /></td>
+		</tr>
+		<tr>
+			<td class="e">Automatic removal of spam:</td>
+			<td class="v">You can clean the Defensio Quarantine automatically after several days. This setting controls the number of days.<br /><br /></td>
+		</tr>
+		<tr>
+			<td class="e">Frontpage Image:</td>
+			<td class="v">The addon supports a widget showing some stats on your blog. This settings controls the color of the image (either none, light or dark)</td>
+		</tr>
+		<tr>
+			<td class="e">Frontpage Image Alignment:</td>
+			<td class="v">Sets the alignment for the frontpage widget.</td>
+		</tr>
+	</table>
+	
+	<h2 id="uninstall">[6] Uninstalling Defensio</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+		<tr class="last-child">
+			<td class="e">INTRODUCTION</td>
+			<td class="v">Currently there is no user-friendly way of deleting this addon.  I spent so much time writing it, I never thought that someone may want to delete it! However, here is a checklist of things you need to manually delete.<br /><br />
+			 Folder:
+			 	<table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td><code>'_defensio2.0'</code></td>
+						<td>  -  In addons folder</td>
+					</tr>
+				</table>
+			Database data:
+				<table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td><code>'defensio'</code></td>
+						<td>  -  Table which contains setting<br />
+						&nbsp;&nbsp;&nbsp;information</td>
+					</tr>
+				</table>
+				<table border="0" cellpadding="3" width="500">
+					<tr class="v">
+						<td>Note, if you are not familiar with database administration, just leave these items floating in your database until I release another version that may do this for you.</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+	<h2 id="knownIssues">[7] Some Known Issues</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+	
+		<tr>
+			<td class="e">INTRODUCTION</td>
+			<td class="v">You will find a list of know issues below. This list may change from time to time depending on the release of newer versions of this addon.</td>
+		</tr>
+		<tr class="last-child">
+			<td class="e">ISSUES</td>
+			<td class="v">None at this point.<br /><br />
+			</td>
+		</tr>
+	</table>
+	
+	<h2 id="futureDev">[8] Future development</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+	
+		<tr>
+			<td class="e">INTRODUCTION</td>
+			<td class="v">If you have any ideas not listed bellow that may make this addon more useful, please feel free to email at <a href="mailto:s&#99;&#104;&#111;&#110;h&#111;&#115;&#101;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#115;&#99;h&#111;&#110;&#104;&#111;&#115;&#101;&#64;&#103;&#109;a&#105;&#108;&#46;&#99;&#111;&#109;</a>.<br /><br /></td>
+		</tr>
+	</table>
+	
+	<h2 id="verHist">[9] Version History</h2>
+	
+	<table border="0" cellpadding="3" width="600">
+	
+		<tr>
+			<td class="e">INTRODUCTION</td>
+			<td class="v">Key:<br />
+			<code><i>[!]</i></code> Important<br />
+			<code><i>[+]</i></code> New<br />
+			<code><i>[-]</i></code> Fixed error<br />
+			<code><i>[*]</i></code> Changes<br /><br />
+			</td>
+		</tr>
+		<tr class="last-child">
+			<td class="e">HISTORY</td>
+			<td class="v">
+			<strong>Initial release (version 2.0)</strong><br />
+			<code><i>[*]</i></code> Rewritten the v1.x code to reflect the changes in the Defensio API v2.0<br />
+            <code><i>[+]</i></code> Added a button to process all failed or previously unchecked comments<br />
+            <code><i>[+]</i></code> Added manual detailing installation and upgrading.<br />
+			</td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>
