@@ -70,6 +70,85 @@ if (version_compare(PHP_VERSION, '5.0.0', '>='))
     //*******************************************************************************************************************
     //   CHECK DATABASE AND CREATE NECESSARY TABLES/FIELDS
     //*******************************************************************************************************************
+    
+    /**
+     * create_options_table_for_defensio()
+     * 
+     * @return
+     */
+    function create_options_table_for_defensio()
+    {
+        // create the options table for defensio
+        global $cfgrow, $pixelpost_db_prefix;
+        $query = "CREATE TABLE `{$pixelpost_db_prefix}defensio` (
+			`server` VARCHAR( 100 ) NULL DEFAULT 'api.defensio.com',
+			`path` VARCHAR( 100 ) NULL DEFAULT 'blog',
+			`api-version` VARCHAR( 100 ) NULL DEFAULT '1.1',
+			`format` VARCHAR( 100 ) NULL DEFAULT 'yaml',
+			`blog` VARCHAR( 100 ) NULL DEFAULT '" . $cfgrow['siteurl'] . "',
+			`post-timeout` INTEGER NULL DEFAULT 10,
+			`threshold` FLOAT NULL DEFAULT 0.8,
+			`remove_older_than` INTEGER NULL DEFAULT 0,
+			`remove_older_than_days` INTEGER NULL DEFAULT 15,
+			`key` VARCHAR( 100 ) NULL
+   )";
+        $defensio_result = mysql_query($query) or die(mysql_error());
+        $query = "INSERT INTO `{$pixelpost_db_prefix}defensio` (
+						`server` ,`path` ,`api-version` ,`format` ,`blog` ,`post-timeout` ,`threshold` ,`remove_older_than` ,
+						`remove_older_than_days` ,`key`) VALUES (
+						'api.defensio.com', 'blog', '1.1', 'yaml', '" . $cfgrow['siteurl'] .
+            "', '10', '0.8', '0', '15', NULL);";
+        $defensio_result = mysql_query($query) or die(mysql_error());
+    }
+
+    /**
+     * update_options_table_for_defensio1_1()
+     * 
+     * @return
+     */
+    function update_options_table_for_defensio1_1()
+    {
+        // update options table for defensio 1.1
+        global $cfgrow, $pixelpost_db_prefix;
+        $query = "ALTER TABLE `{$pixelpost_db_prefix}defensio` 
+			ADD `defensio_stats` TEXT,
+			ADD `defensio_stats_updated_at` VARCHAR( 20 ) NULL DEFAULT '1195732629',
+			ADD `defensio_widget_image` VARCHAR( 20 ) NULL DEFAULT 'dark',
+			ADD `defensio_widget_align` VARCHAR( 20 ) NULL DEFAULT 'left'";
+        $defensio_result = mysql_query($query) or die(mysql_error());
+    }
+
+    /**
+     * update_comments_table_for_defensio()
+     * 
+     * @return
+     */
+    function update_comments_table_for_defensio()
+    {
+        // add two fields to the comment table
+        global $cfgrow, $pixelpost_db_prefix;
+        $query = "ALTER TABLE `{$pixelpost_db_prefix}comments` ADD `spaminess` FLOAT NULL ,ADD `signature` VARCHAR( 55 ) NULL";
+        $defensio_result = mysql_query($query) or die(mysql_error());
+    }
+
+    /**
+     * update_database_for_defensio2_0()
+     * 
+     * @return
+     */
+    function update_database_for_defensio2_0()
+    {
+        // add two fields to the comment table
+        global $cfgrow, $pixelpost_db_prefix;
+
+        $query = "ALTER TABLE `{$pixelpost_db_prefix}comments` ADD `status` VARCHAR( 10 ) NULL, ADD `allow` BOOL NULL ,ADD `classification` VARCHAR( 55 ) NULL";
+        $defensio_result = mysql_query($query) or die(mysql_error());
+        $query = "ALTER TABLE `{$pixelpost_db_prefix}defensio` DROP `server`, DROP `path`, DROP `api-version`, DROP `format`";
+        $defensio_result = mysql_query($query) or die(mysql_error());
+        $query = "ALTER TABLE `{$pixelpost_db_prefix}defensio` ADD `defensio_comments_processed_at` VARCHAR( 20 ) NULL DEFAULT '1195732629'";
+        $defensio_result = mysql_query($query) or die(mysql_error());
+    }
+    
     // Update comment table
     if (!is_field_exists('spaminess', 'comments')) {
         // create field
@@ -190,84 +269,6 @@ if (version_compare(PHP_VERSION, '5.0.0', '>='))
         $defensio_result = mysql_query($query);
         $GLOBALS['defensio_result_message'] =
             '<div class="jcaption confirm">The Defensio Quarantine has been emptied.</div>';
-    }
-
-    /**
-     * create_options_table_for_defensio()
-     * 
-     * @return
-     */
-    function create_options_table_for_defensio()
-    {
-        // create the options table for defensio
-        global $cfgrow, $pixelpost_db_prefix;
-        $query = "CREATE TABLE `{$pixelpost_db_prefix}defensio` (
-			`server` VARCHAR( 100 ) NULL DEFAULT 'api.defensio.com',
-			`path` VARCHAR( 100 ) NULL DEFAULT 'blog',
-			`api-version` VARCHAR( 100 ) NULL DEFAULT '1.1',
-			`format` VARCHAR( 100 ) NULL DEFAULT 'yaml',
-			`blog` VARCHAR( 100 ) NULL DEFAULT '" . $cfgrow['siteurl'] . "',
-			`post-timeout` INTEGER NULL DEFAULT 10,
-			`threshold` FLOAT NULL DEFAULT 0.8,
-			`remove_older_than` INTEGER NULL DEFAULT 0,
-			`remove_older_than_days` INTEGER NULL DEFAULT 15,
-			`key` VARCHAR( 100 ) NULL
-   )";
-        $defensio_result = mysql_query($query) or die(mysql_error());
-        $query = "INSERT INTO `{$pixelpost_db_prefix}defensio` (
-						`server` ,`path` ,`api-version` ,`format` ,`blog` ,`post-timeout` ,`threshold` ,`remove_older_than` ,
-						`remove_older_than_days` ,`key`) VALUES (
-						'api.defensio.com', 'blog', '1.1', 'yaml', '" . $cfgrow['siteurl'] .
-            "', '10', '0.8', '0', '15', NULL);";
-        $defensio_result = mysql_query($query) or die(mysql_error());
-    }
-
-    /**
-     * update_options_table_for_defensio1_1()
-     * 
-     * @return
-     */
-    function update_options_table_for_defensio1_1()
-    {
-        // update options table for defensio 1.1
-        global $cfgrow, $pixelpost_db_prefix;
-        $query = "ALTER TABLE `{$pixelpost_db_prefix}defensio` 
-			ADD `defensio_stats` TEXT,
-			ADD `defensio_stats_updated_at` VARCHAR( 20 ) NULL DEFAULT '1195732629',
-			ADD `defensio_widget_image` VARCHAR( 20 ) NULL DEFAULT 'dark',
-			ADD `defensio_widget_align` VARCHAR( 20 ) NULL DEFAULT 'left'";
-        $defensio_result = mysql_query($query) or die(mysql_error());
-    }
-
-    /**
-     * update_comments_table_for_defensio()
-     * 
-     * @return
-     */
-    function update_comments_table_for_defensio()
-    {
-        // add two fields to the comment table
-        global $cfgrow, $pixelpost_db_prefix;
-        $query = "ALTER TABLE `{$pixelpost_db_prefix}comments` ADD `spaminess` FLOAT NULL ,ADD `signature` VARCHAR( 55 ) NULL";
-        $defensio_result = mysql_query($query) or die(mysql_error());
-    }
-
-    /**
-     * update_database_for_defensio2_0()
-     * 
-     * @return
-     */
-    function update_database_for_defensio2_0()
-    {
-        // add two fields to the comment table
-        global $cfgrow, $pixelpost_db_prefix;
-
-        $query = "ALTER TABLE `{$pixelpost_db_prefix}comments` ADD `status` VARCHAR( 10 ) NULL, ADD `allow` BOOL NULL ,ADD `classification` VARCHAR( 55 ) NULL";
-        $defensio_result = mysql_query($query) or die(mysql_error());
-        $query = "ALTER TABLE `{$pixelpost_db_prefix}defensio` DROP `server`, DROP `path`, DROP `api-version`, DROP `format`";
-        $defensio_result = mysql_query($query) or die(mysql_error());
-        $query = "ALTER TABLE `{$pixelpost_db_prefix}defensio` ADD `defensio_comments_processed_at` VARCHAR( 20 ) NULL DEFAULT '1195732629'";
-        $defensio_result = mysql_query($query) or die(mysql_error());
     }
 }
 ?>
