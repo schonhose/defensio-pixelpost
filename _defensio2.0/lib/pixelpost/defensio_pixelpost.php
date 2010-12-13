@@ -578,7 +578,8 @@ function defensio_submit_nonspam_comment($defensio_conf)
                         'author-email' => $row['email'], 'author-ip' => $row['ip'], 'author-logged-in' =>
                         'false', 'author-name' => $row['name'], 'parent-document-date' =>
                         defensio_get_datetime_post($row['parent_id']), 'parent-document-permalink' => $defensio_conf['blog'] .
-                        "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER']);
+                        "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER'],
+                        'author-url' => $row['url']);
                     $post_result = $defensio->postDocument($document);
                     defensio_process_comment_pixelpost($post_result, true, (int)$cid);
                 }
@@ -652,7 +653,8 @@ function defensio_submit_spam_comment($defensio_conf)
                         'author-email' => $row['email'], 'author-ip' => $row['ip'], 'author-logged-in' =>
                         'false', 'author-name' => $row['name'], 'parent-document-date' =>
                         defensio_get_datetime_post($row['parent_id']), 'parent-document-permalink' => $defensio_conf['blog'] .
-                        "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER']);
+                        "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER'], 
+                        'author-url' => $row['url']);
                     $post_result = $defensio->postDocument($document);
                     defensio_process_comment_pixelpost($post_result, true, (int)$cid);
                 }
@@ -717,7 +719,8 @@ function defensio_process_unprocessed($defensio_conf)
             'author-email' => $row['email'], 'author-ip' => $row['ip'], 'author-logged-in' =>
             'false', 'author-name' => $row['name'], 'parent-document-date' =>
             defensio_get_datetime_post($row['parent_id']), 'parent-document-permalink' => $defensio_conf['blog'] .
-            "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER']);
+            "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER'], 
+            'author-url' => $row['url']);
         /**
          * Only continue with Defensio if the API key is valid
          */
@@ -742,7 +745,8 @@ function defensio_process_unprocessed($defensio_conf)
             'author-email' => $row['email'], 'author-ip' => $row['ip'], 'author-logged-in' =>
             'false', 'author-name' => $row['name'], 'parent-document-date' =>
             defensio_get_datetime_post($row['parent_id']), 'parent-document-permalink' => $defensio_conf['blog'] .
-            "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER']);
+            "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER'], 
+            'author-url' => $row['url']);
         /**
          * Only continue with Defensio if the API key is valid
          */

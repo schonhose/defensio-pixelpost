@@ -248,7 +248,8 @@ if (version_compare(PHP_VERSION, '5.0.0', '>='))
             'author-email' => $row['email'], 'author-ip' => $row['ip'], 'author-logged-in' =>
             'false', 'author-name' => $row['name'], 'parent-document-date' =>
             defensio_get_datetime_post($row['parent_id']), 'parent-document-permalink' => $defensio_conf['blog'] .
-            "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER']);
+            "index.php?showimage=" . $row['parent_id'], 'referrer' => $_SERVER['HTTP_REFERER'],
+            'author-url' => $row['url']);
         $defensio = new Defensio($defensio_conf['key']);
         /**
          * Only continue with Defensio if the API key is valid

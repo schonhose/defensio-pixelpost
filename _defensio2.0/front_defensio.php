@@ -104,7 +104,7 @@ if (version_compare(PHP_VERSION, '5.0.0', '>=')) {
                 'author-email' => $email, 'author-ip' => $ip, 'author-logged-in' => 'false',
                 'author-name' => $name, 'parent-document-date' => defensio_get_datetime_post($parent_id),
                 'parent-document-permalink' => $defensio_conf['blog'] . "index.php?showimage=" .
-                $parent_id, 'referrer' => $_SERVER['HTTP_REFERER']);
+                $parent_id, 'referrer' => $_SERVER['HTTP_REFERER'], 'author-url' => $url);
             $post_result = $defensio->postDocument($document);
             $cfgrow['commentemail']=$tmp_commentmail;
             defensio_process_comment_pixelpost($post_result, true);
